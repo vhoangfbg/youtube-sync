@@ -1,0 +1,37 @@
+name: Youtube Sync
+
+on:
+  schedule:
+    - cron: "0 2 * * *"   # Chạy lúc 2h sáng UTC mỗi ngày
+  workflow_dispatch:       # Cho phép chạy thủ công từ GitHub
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # Giải mã lại file client_secret.json
+      - name: Decode client_secret.json
+        run: echo "${{ secrets.CLIENT_SECRET }}" | base64 -d > client_secret.json
+
+      # Giải mã lại token_A.pkl
+      - name: Decode token_A.pkl
+        run: echo "${{ secrets.TOKEN_A }}" | base64 -d > token_A.pkl
+
+      # Giải mã lại token_B.pkl
+      - name: Decode token_B.pkl
+        run: echo "${{ secrets.TOKEN_B }}" | base64 -d > token_B.pkl
+
+      - name: Run script
+        run: python sync_subs.py
