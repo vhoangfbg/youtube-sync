@@ -107,12 +107,6 @@ if __name__ == "__main__":
     print(f" - Gọi list: {base_cost} units")
     print(f"👉 Tổng dự kiến: {total} units (giới hạn free 10,000 units/ngày)\n")
 
-    # Confirm trước khi chạy
-    confirm = input("Bạn có muốn tiếp tục? (y/n): ").lower()
-    if confirm != "y":
-        print("❌ Huỷ đồng bộ.")
-        exit()
-
     notifications = []
 
     # Thêm kênh còn thiếu
@@ -126,6 +120,9 @@ if __name__ == "__main__":
             notifications.append(unsubscribe_from_channel(creds_B, cid, subs_B[cid], subs_map_B))
 
     # In thông báo cuối
-    print("\n".join(notifications))
-    print("✅ Đồng bộ hoàn tất!")
-    
+    if notifications:
+        print("\n".join(notifications))
+    else:
+        print("✅ Không có gì để thay đổi.")
+
+    print("🎉 Đồng bộ hoàn tất!")
